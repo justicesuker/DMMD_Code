@@ -1,14 +1,11 @@
 # DMMD_Code
 
-Code for reproducing results and corresponding graphs shown in "Double-matched matrix decomposition for multi-view data". 
-
 Description 
 -------
-
-We consider the case of two matched datasets, where the matching is performed both by rows and by columns. This situation, arises, for example, when the expression levels of the same genes are measured across two tissues of the same subject. The goal of the analysis is to identify common as well as individual signals within each tissue, where common signals can be separated into two parts: common across subjects, and common across genes. In this work, we combine the view of row and column directions, then prove a lemma that guarantees the existence and uniqueness of matrix factorization in double matched cases. Based on the lemma, a new technique which could calculate the common and individual signals in both ways is introduced. In the section of algorithm, we provide a valid way to calculate the decomposition efficiently. After that, we provide the theoretical guarantee of convergence on the algorithm. In the end, we compare our methods with other methods on performance using simulated data as well as real data.
+Code for reproducing results shown in "Double-matched matrix decomposition for multi-view data". Please run **DMMD_Code.Rproj** before opening individual files to make sure the working directory is correct.
 
 ## Main functions
-Listed below are functions that are used to perform double-matched matrix decomposition. They are all located in *Simulations/MyFunction*
+Listed below are functions that are used to perform double-matched matrix decomposition. They are all located in *Simulations/MyFunction*.
 
 **Preliminary_Functions.R** - Some small convenient preliminary functions. *Fnorm* function calculates Frobenius norm of a matrix. *Matscale* function does center and scale for a matrix, either row-wise or column-wise. *DoubleStandardize* function double standardizes a matrix, which makes mean 0 and variance 1 for all the rows and columns. *projection* calculates the projection matrix for a specified matrix. *GenOrthoMatrix* generates pseudo-random orthogonal matrix. *svd_recover* does rank-r svd approximation of a specified matrix.
 
@@ -22,32 +19,44 @@ Listed below are functions that are used to perform double-matched matrix decomp
 
 **DoubleMatchedMatrixDecomposition.R** - *DMMD_v2* is the main function of the project, which performs double-matched matrix decomposition.
 
-**DoubleMatchedDataGen.R** - *DoubleDataGen2* is the function that generates double matched data used for simulation.
-
-**DMMD_Impute.R** - The main function is *DMMD_Impute* which performs an iterative procedure to do imputation based on DMMD method.
+**DoubleMatchedDataGen.R** - *DoubleDataGen3* is the function that generates double matched data used for simulation.
 
 ## Simulation data
-Three settings (currently two, the potential third one will be added soon) of data are generated for comparing DMMD method with other competitors on rank estimation as well as signal identification. Refer to section 3 in the draft manuscript. Folders below are located in the folder of *Simulations*
+Six settings of simulation data are generated for comparing the performance of DMMD with other competitors on rank estimation as well as signal identification. Refer to Section 3 in the draft for more details. They are located in *Simulations*.
 
-**SimulationData** - The folder contains the data for simulation setting 1 mentioned in the draft manuscript. *Main.R* is the program that generates the data. *Data.RData* stores the generated data.
+**SimulationData_Setting1** - *Main.R* generates the simulation data for Setting 1 and save the data in *Data.RData*.
 
-**SpecialRankData** - The folder contains the data for simulation setting 2 mentioned in the draft manuscript. *Main.R* is the program that generates the data. *Data.RData* stores the generated data.
+**SimulationData_Setting2** - *Main.R* generates the simulation data for Setting 2 and save the data in *Data.RData*.
 
-**TBD** - To be added. Signal to noise ratio is 0.5.
+**SimulationData_Setting3** - *Main.R* generates the simulation data for Setting 3 and save the data in *Data.RData*.
+
+**Data_Setting4_FixRank** - *Main.R* generates the simulation data for Setting 4 and save the data in *Data.RData*.
+
+**Data_Setting5_FixRank_SNR0.5** - *Main.R* generates the simulation data for Setting 5 and save the data in *Data.RData*.
+
+**SimulationData_Setting6** - *Main.R* generates the simulation data for Setting 6 and save the data in *Data1.RData* and *Data2.RData*.
 
 ## Simulations scripts
+Different methods are run on the simulated data on six settings. The results and figures are saved. They are located in *Simulations*.
 
-**RankEstimation_With_ED** - Simulation setting 1, compare the performance on rank estimation. 
+**RankEstimation_Setting1** - *AJIVE.R* runs AJIVE on simulation data for Setting 1 and saves the result in *AJIVEoutput.RData*; *SLIDE.R* runs SLIDE on simulation data for Setting 1 and saves the result in *SLIDEoutput.RData*; *Main.R* runs DMMD and JIVE on simulation data for Setting 1 and saves the result in *output.RData*, *PlotSimulations_Draft.R* combines all the results from AJIVE, SLIDE, DMMD and JIVE and plot the figures. They are saved in *Figures/Draft*.
 
-**Signal_Relative_20200604** - Simulation setting 1, compare the performance on signal identification.
+**RankEstimation_Setting2** - The files have Similar functions as **RankEstimation_Setting1**. The results are based on simulation data for Setting 2.
 
-**SpecialRank_20200604_ED** - Simulation setting 2, compare the performance on rank estimation. 
+**RankEstimation_Setting3_Special_Final** - The files have Similar functions as **RankEstimation_Setting1**. The results are based on simulation data for Setting 3.
 
-**SpecialRank_RelativeSignal_20200604** - Simulation setting 2, compare the performance on signal identification.
+**Signal_Identification_Setting4** - The files have Similar functions as **RankEstimation_Setting1**. The results are based on simulation data for Setting 4.
 
-**TBD_Rank_Setting3** - Simulation setting 3, compare rank estimation performance.
+**Signal_Identification_Setting5** - The files have Similar functions as **RankEstimation_Setting1**. The results are based on simulation data for Setting 5.
 
-**TBD_Signal_Setting3** - Simulation setting 3, compare the performance on signal identification.
+**Signal_Identification_Setting6_Special** - The files have Similar functions as **RankEstimation_Setting1**. The results are based on simulation data for Setting 6.
+
+## Demonstration figure 
+The **Model_Demo_Picture** folder contains the code expressing how Figure 1 in the draft is generated.
+
+## Application
+**Soccer** folder contains the soccer data sets we use for analysis and the analysis results shown in draft. 
+**TCGA** folder contains the miRNA data sets we use for analysis and the analysis results shown in draft. 
 
 References
 -------
