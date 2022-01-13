@@ -58,6 +58,28 @@ The **Model_Demo_Picture** folder contains the code expressing how Figure 1 in t
 **Soccer** folder contains the soccer data sets we use for analysis and the analysis results shown in draft. 
 **TCGA** folder contains the miRNA data sets we use for analysis and the analysis results shown in draft. 
 
+## Example
+```{r}
+source("Simulations/MyFunction/Angle_Calculation.R")
+source("Simulations/MyFunction/Profile_Likelihood_Rank_Selection.R")
+source("Simulations/MyFunction/DoubleMatchedMatrixDecomposition.R")
+source("Simulations/MyFunction/FindOptMatrix.R")
+source("Simulations/MyFunction/Preliminary_Functions.R")
+source("Simulations/MyFunction/Select_ED_Rank.R")
+source("Simulations/MyFunction/DoubleMatchedDataGen.R")
+source("Simulations/MyFunction/DMMD_Irina.R")
+set.seed(37)
+data = DoubleDataGen3(n = 20, p = 16, rank = c(5, 4), joint_rank_col = 2, joint_rank_row = 1, nrep = 1, std1 = 0.01, std2 = 0.01)
+X1 = data$X1_list[[1]]
+X2 = data$X2_list[[1]]
+DMMD_result = DMMD_v2(X1, X2)
+DMMD_i_result = DMMD_Irina_unknown(X1, X2)
+DMMD_i_result2 = DMMD_Irina(X1,X2, r1 = 8, r2 = 6, rc = 1, rr = 1)
+A1_est = X1 - DMMD_result$Error$Error1
+A1 = data$Signal1_list[[1]]
+head(A1_est - A1)
+```
+
 References
 -------
 [Feng, Qing, et al. "Angle-based joint and individual variation explained." Journal of multivariate analysis 166 (2018): 241-265.](https://arxiv.org/pdf/1704.02060.pdf).
