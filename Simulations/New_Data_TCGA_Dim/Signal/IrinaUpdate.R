@@ -1,15 +1,16 @@
-# This is the function that compares accuracy of signal estimation given true ranks between DMMD and JIVE. 
 rm(list = ls())
-source("Simulations/MyFunction/Angle_Calculation.R")
-source("Simulations/MyFunction/Profile_Likelihood_Rank_Selection.R")
-source("Simulations/MyFunction/DoubleMatchedMatrixDecomposition.R")
-source("Simulations/MyFunction/FindOptMatrix.R")
-source("Simulations/MyFunction/Preliminary_Functions.R")
-source("Simulations/IrinaFunction/DMMD_Irina.R")
+# Check the difference between my original algorithm and DMMD-i.
+function_path = "DMMDFunctions/"
+source(paste(function_path,"Angle_Calculation.R",sep=''))
+source(paste(function_path,"Profile_Likelihood_Rank_Selection.R",sep=''))
+source(paste(function_path,"DoubleMatchedMatrixDecomposition.R",sep=''))
+source(paste(function_path,"FindOptMatrix.R",sep=''))
+source(paste(function_path,"Preliminary_Functions.R",sep=''))
+source(paste(function_path,"DMMD_iterative.R",sep=''))
 
 # Get the generated data
-load("Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Data/Data1.RData")
-load("Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Data/Data2.RData")
+load("Simulations/New_Data_TCGA_Dim/Data/Data1.RData")
+load("Simulations/New_Data_TCGA_Dim/Data/Data2.RData")
 
 set.seed(37)
 n = 88
@@ -50,7 +51,7 @@ for (i in 1:nrep){
   I2_c = signal2 - J2_c
   
   # DMMD
-  Irina_result = DMMD_Irina(X1, X2, r1 = total_rank1[i], r2 = total_rank2[i], rc = joint_rank_col[i], rr = joint_rank_row[i])
+  Irina_result = DMMD_i(X1, X2, r1 = total_rank1[i], r2 = total_rank2[i], rc = joint_rank_col[i], rr = joint_rank_row[i])
   # The estimation error of signals in DMMD
   Irina_Jc1 = projection(Irina_result$M,ortho = TRUE) %*% Irina_result$A1
   Irina_Jc2 = projection(Irina_result$M,ortho = TRUE) %*% Irina_result$A2
@@ -82,4 +83,4 @@ save(Irina_signal_error1, Irina_signal_error2,
      Irina_ind_row_error1, Irina_ind_row_error2,
      Irina_joint_col_error1, Irina_joint_col_error2,
      Irina_ind_col_error1, Irina_ind_col_error2, 
-     file = "Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Signal/Irina_output.RData")
+     file = "Simulations/New_Data_TCGA_Dim/Signal/Irina_output.RData")

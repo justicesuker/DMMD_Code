@@ -1,17 +1,18 @@
 # This is the function that compares accuracy of signal estimation given true ranks between DMMD and JIVE. 
-source("../../../MyFunction/Angle_Calculation.R")
-source("../../../MyFunction/Profile_Likelihood_Rank_Selection.R")
-source("../../../MyFunction/DoubleMatchedMatrixDecomposition.R")
-source("../../../MyFunction/FindOptMatrix.R")
-source("../../../MyFunction/Preliminary_Functions.R")
-source("../../../MyFunction/Select_ED_Rank.R")
+rm(list = ls())
+function_path = "DMMDFunctions/"
+source(paste(function_path,"Angle_Calculation.R",sep=''))
+source(paste(function_path,"Profile_Likelihood_Rank_Selection.R",sep=''))
+source(paste(function_path,"DoubleMatchedMatrixDecomposition.R",sep=''))
+source(paste(function_path,"FindOptMatrix.R",sep=''))
+source(paste(function_path,"Preliminary_Functions.R",sep=''))
 
 library(foreach)
 library(doParallel)
 
 # Get the generated data
-load("../Data/Data1.RData")
-load("../Data/Data2.RData")
+load("Simulations/New_Data_TCGA_Dim/Data/Data1.RData")
+load("Simulations/New_Data_TCGA_Dim/Data/Data2.RData")
 
 set.seed(37)
 n = 88
@@ -133,5 +134,4 @@ output <- foreach (i = 1:nrep) %dopar% {
 }
 
 stopCluster(cl)
-save(output, file = "output.RData")
-
+save(output, file = "Simulations/New_Data_TCGA_Dim/Signal/output.RData")

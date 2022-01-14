@@ -1,16 +1,16 @@
 rm(list = ls())
-load("Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Signal/SLIDEoutput.RData")
+load("Simulations/New_Data_TCGA_Dim/Signal/SLIDEoutput.RData")
 output_slide = output
 rm(output)
-load("Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Signal/AJIVE_output.RData.")
+load("Simulations/New_Data_TCGA_Dim/Signal/AJIVE_output.RData.")
 output_ajive = output
 rm(output)
-load("Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Signal/Irina_output.RData.")
-load("Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Signal/output.RData.")
-load("Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Data/Data1.RData")
-load("Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Data/Data2.RData")
+load("Simulations/New_Data_TCGA_Dim/Signal/Irina_output.RData.")
+load("Simulations/New_Data_TCGA_Dim/Signal/output.RData.")
+load("Simulations/New_Data_TCGA_Dim/Data/Data1.RData")
+load("Simulations/New_Data_TCGA_Dim/Data/Data2.RData")
 # Load my Fnorm function
-source("Simulations/MyFunction/Preliminary_Functions.R")
+source("DMMDFunctions/Preliminary_Functions.R")
 
 n = 88
 p = 736
@@ -242,8 +242,8 @@ gg_col <- gg_col + theme(axis.title.x=element_blank(), axis.text.x=element_blank
 gg_col <- gg_col + scale_colour_manual(values = c("blue", "black", "maroon", "red","green"))
 gg_col
 
-# Draw boxplot
-fig.path = "Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Signal/Figures/"
+# Save
+fig.path = "Simulations/New_Data_TCGA_Dim/Signal/Figures/"
 pdf(file = paste(fig.path,"Signal Identification for Row Decomposition_TCGASetting.pdf",sep=""), width = 16, height = 9)
 print(gg_row)
 dev.off()

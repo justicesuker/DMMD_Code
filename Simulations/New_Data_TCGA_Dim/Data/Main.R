@@ -1,6 +1,9 @@
 rm(list=ls())
-source("Simulations/MyFunction/DoubleMatchedDataGen.R")
-source("Simulations/MyFunction/Preliminary_Functions.R")
+function_path1 = "DMMDFunctions/"
+function_path2 = "OtherFunctions/"
+source(paste(function_path1,"Preliminary_Functions.R",sep=''))
+source(paste(function_path2,"DoubleMatchedDataGen.R",sep=''))
+
 set.seed(37)
 
 n = 88
@@ -76,6 +79,5 @@ for(i in 1:nrep){
 }
 
 # Save the data
-save(X1_list, file = "Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Data/Data1.RData")
-     
-save(X2_list, signal1_list, signal2_list, J1r_list, J2r_list, J1c_list, J2c_list, file = "Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Data/Data2.RData")
+save(X1_list, file = "Simulations/New_Data_TCGA_Dim/Data/Data1.RData")
+save(X2_list, signal1_list, signal2_list, J1r_list, J2r_list, J1c_list, J2c_list, file = "Simulations/New_Data_TCGA_Dim/Data/Data2.RData")

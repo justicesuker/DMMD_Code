@@ -1,17 +1,20 @@
 # This is the function that compares accuracy of rank estimation.
 # The methods we compare are profile likelihood (PL), edge distribution (ED) and permutation method used in JIVE
-source("../../../MyFunction/Angle_Calculation.R")
-source("../../../MyFunction/Profile_Likelihood_Rank_Selection.R")
-source("../../../MyFunction/DoubleMatchedMatrixDecomposition.R")
-source("../../../MyFunction/FindOptMatrix.R")
-source("../../../MyFunction/Preliminary_Functions.R")
-source("../../../MyFunction/Select_ED_Rank.R")
+function_path1 = "DMMDFunctions/"
+function_path2 = "OtherFunctions/"
+source(paste(function_path1,"Angle_Calculation.R",sep=''))
+source(paste(function_path1,"Profile_Likelihood_Rank_Selection.R",sep=''))
+source(paste(function_path1,"DoubleMatchedMatrixDecomposition.R",sep=''))
+source(paste(function_path1,"FindOptMatrix.R",sep=''))
+source(paste(function_path1,"Preliminary_Functions.R",sep=''))
+source(paste(function_path2,"Select_ED_Rank.R",sep=''))
 
 library(foreach)
 library(doParallel)
 
 # Get the generated data
-load("../Data/Data.RData")
+load("Simulations/New_Data_TCGA_Dim/Data/Data1.RData")
+load("Simulations/New_Data_TCGA_Dim/Data/Data2.RData")
 
 set.seed(37)
 
@@ -95,8 +98,4 @@ output <- foreach (i = 1:nrep) %dopar% {
 
 stopCluster(cl)
 
-save(output,total_rank1,total_rank2,joint_rank_col,joint_rank_row, file = "output.RData")
-
-
-
-
+save(output,total_rank1,total_rank2,joint_rank_col,joint_rank_row, file = "Simulations/New_Data_TCGA_Dim/Rank/output.RData")

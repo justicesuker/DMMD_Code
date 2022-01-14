@@ -1,14 +1,15 @@
 rm(list = ls())
-load("Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Rank/SLIDEoutput.RData")
+load("Simulations/New_Data_TCGA_Dim/Rank/SLIDEoutput.RData")
 output_slide = output
 rm(output)
-load("Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Rank/AJIVEoutput.RData")
+load("Simulations/New_Data_TCGA_Dim/Rank/AJIVEoutput.RData")
 output_ajive = output
 rm(output)
-load("Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Rank/output.RData")
+load("Simulations/New_Data_TCGA_Dim/Rank/output.RData")
 
 # Load my Fnorm function
-source("Simulations/MyFunction/Preliminary_Functions.R")
+function_path = "DMMDFunctions/"
+source(paste(function_path,"Preliminary_Functions.R",sep=''))
 
 # n = 240
 # p = 200
@@ -159,7 +160,7 @@ gg_total <- gg_total + scale_colour_manual(values = c("grey","orange","red","bla
 gg_total
 
 # Draw boxplot
-fig.path = "Simulations/AdditionalSimulations/New_Data_TCGA_Dim/Rank/Figures/"
+fig.path = "Simulations/New_Data_TCGA_Dim/Rank/Figures/"
 pdf(file = paste(fig.path,"Comparison on Joint Rank Estimation_TCGA_Setting.pdf",sep=""), width = 5, height = 4)
 print(gg_joint)
 dev.off()

@@ -4,9 +4,9 @@ library(foreach)
 library(doParallel)
 
 # Get the generated data
-load("../Data/Data1.RData")
-load("../Data/Data2.RData")
-source("../../../MyFunction/slide_prelim.R")
+load("Simulations/New_Data_TCGA_Dim/Data/Data1.RData")
+load("Simulations/New_Data_TCGA_Dim/Data/Data2.RData")
+source("OtherFunctions/slide_prelim.R")
 
 set.seed(37)
 
@@ -47,4 +47,4 @@ output <- foreach (i = 1:nrep, .errorhandling = 'pass') %dopar% {
 
 stopCluster(cl)
 
-save(output,total_rank1,total_rank2,joint_rank_col,joint_rank_row, file = "SLIDEoutput.RData")
+save(output,total_rank1,total_rank2,joint_rank_col,joint_rank_row, file = "Simulations/New_Data_TCGA_Dim/Signal/SLIDEoutput.RData")
