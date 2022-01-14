@@ -275,3 +275,180 @@ DMMD_i <- function(X1, X2, r1 = NULL, r2 = NULL, rc = NULL, rr = NULL, eps = .Ma
   
   return(list(A1 = A1, A2 = A2, M = M, N = N, r1 = r1, r2 = r2, rc = rc, rr = rr, obj_vec = obj_vec))
 }
+
+# Another implementation of iterative DMMD when given ranks. It gives the same results as DMMD_i. 
+DMMD_All <- function(X1, X2, r1, r2, rc, rr, eps = .Machine$double.eps^0.5, kmax = 1000){
+  n = nrow(X1)
+  p = ncol(X1)
+  X1F2 = sum(X1^2)
+  X2F2 = sum(X2^2)
+  
+  # Save the svd result of the original matrices
+  svd_x1 = svd(X1)
+  svd_x2 = svd(X2)
+  
+  # Get initial estimates for M and N by averaging
+  # Calculate joint column space projection matrix (this is MM')
+  if (rc == 0){
+    joint_space_c = matrix(rep(0, n), nrow = n)
+    P_c = projection(joint_space_c, ortho = TRUE)
+  }
+  else{
+    angle_result_c = angle_cal(svd_x1$u[,1:r1], svd_x2$u[,1:r2], tol = tol)
+    pv1_c = angle_result_c$principal_vector1
+    pv2_c = angle_result_c$principal_vector2
+    joint_space_c = (pv1_c[,1:rc] + pv2_c[,1:rc])/2
+    P_c = projection(joint_space_c, ortho = TRUE)
+  }
+  # Calculate joint row space projection matrix (this is NN')
+  if (rr == 0){
+    joint_space_r = matrix(rep(0, p), nrow = p)
+    P_r = projection(joint_space_r, ortho = TRUE)
+  }
+  else{
+    angle_result_r = angle_cal(svd_x1$v[,1:r1], svd_x2$v[,1:r2], tol = tol)
+    pv1_r = angle_result_r$principal_vector1
+    pv2_r = angle_result_r$principal_vector2
+    joint_space_r = (pv1_r[,1:rr] + pv2_r[,1:rr])/2
+    P_r = projection(joint_space_r, ortho = TRUE)
+  }
+  
+  # Initialize R1, R2 and complete full column space
+  if (r1 == rc){
+    R1 = updateR(X1, P_rall = diag(p), P_c, dimR = r1 - rc)
+    P_call1 = projection(R1, ortho = TRUE)
+  }
+  else{
+    R1 = updateR(X1, P_rall = diag(p), P_c, dimR = r1 - rc)
+    P_call1 = P_c + projection(R1, ortho = TRUE)
+  }
+  if (r2 == rc){
+    R2 = updateR(X2, P_rall = diag(p), P_c, dimR = r2 - rc)
+    P_call2 = projection(R2, ortho = TRUE)
+  }
+  else{
+    R2 = updateR(X2, P_rall = diag(p), P_c, dimR = r2 - rc)
+    P_call2 = P_c + projection(R2, ortho = TRUE)
+  }
+  
+  # Initialize S1, S2 and complete full column space
+  if (r1 == rr){
+    S1 = updateS(X1, P_call = P_call1, P_r = P_r, dimS = r1 - rr)
+    P_rall1 = projection(S1, ortho = TRUE)
+  }
+  else{
+    S1 = updateS(X1, P_call = P_call1, P_r = P_r, dimS = r1 - rr)
+    P_rall1 = P_r + projection(S1, ortho = TRUE)
+  }
+  if (r2 == rr){
+    S2 = updateS(X2, P_call = P_call2, P_r = P_r, dimS = r2 - rr)
+    P_rall2 = projection(S2, ortho = TRUE)
+  }
+  else{
+    S2 = updateS(X2, P_call = P_call2, P_r = P_r, dimS = r2 - rr)
+    P_rall2 = P_r + projection(S2, ortho = TRUE)
+  }
+  
+  # Calculate estimated signals and objective value
+  A1 = P_call1 %*% X1 %*% P_rall1
+  A2 = P_call2 %*% X2 %*% P_rall2
+  obj_old = sum((X1-A1)^2) + sum((X2-A2)^2)
+  
+  k = 0
+  error = 1000
+  obj_vec = c(obj_old)
+  # while loop
+  while((error > eps)&(k < kmax)){
+    # Count iterations
+    k = k + 1
+    print("Update M")
+    # update M
+    if (rc == 0){
+      M = matrix(rep(0, n), nrow = n)
+      P_c = projection(M, ortho = TRUE)
+      P_call1 = projection(R1, ortho = TRUE)
+      P_call2 = projection(R2, ortho = TRUE)
+    }
+    else{
+      M = updateM(X1, X2, PR1 = projection(R1, ortho = TRUE), PR2 = projection(R2, ortho = TRUE), P_rall1, P_rall2, rc)
+      P_c = projection(M, ortho = TRUE)
+      P_call1 = P_c + projection(R1, ortho = TRUE)
+      P_call2 = P_c + projection(R2, ortho = TRUE)
+    }
+    A1 = P_call1 %*% X1 %*% P_rall1
+    A2 = P_call2 %*% X2 %*% P_rall2
+    obj_new = sum((X1-A1)^2) + sum((X2-A2)^2)
+    print(obj_new)
+    
+    print("Update N")
+    # update N
+    if (rr == 0){
+      N = matrix(rep(0, p), nrow = p)
+      P_r = projection(N, ortho = TRUE)
+      P_rall1 = projection(S1, ortho = TRUE)
+      P_rall2 = projection(S2, ortho = TRUE)
+    }
+    else{
+      N = updateN(X1, X2, PS1 = projection(S1, ortho = TRUE), PS2 = projection(S2, ortho = TRUE), P_call1, P_call2, rr)
+      P_r = projection(N, ortho = TRUE)
+      P_rall1 = P_r + projection(S1, ortho = TRUE)
+      P_rall2 = P_r + projection(S2, ortho = TRUE)
+    }
+    A1 = P_call1 %*% X1 %*% P_rall1
+    A2 = P_call2 %*% X2 %*% P_rall2
+    obj_new = sum((X1-A1)^2) + sum((X2-A2)^2)
+    print(obj_new)
+    
+    print("Update R1, R2")
+    # update R and full column space
+    if (r1 == rc){
+      R1 = matrix(rep(0, n), nrow = n)
+      P_call1 = P_c
+    }
+    else{
+      R1 = updateR(X1, P_rall = P_rall1, P_c, dimR = r1 - rc)
+      P_call1 = P_c + projection(R1, ortho = TRUE)
+    }
+    if (r2 == rc){
+      R2 = matrix(rep(0, n), nrow = n)
+      P_call2 = P_c
+    }
+    else{
+      R2 = updateR(X2, P_rall = P_rall2, P_c, dimR = r2 - rc)
+      P_call2 = P_c + projection(R2, ortho = TRUE)
+    }
+    A1 = P_call1 %*% X1 %*% P_rall1
+    A2 = P_call2 %*% X2 %*% P_rall2
+    obj_new = sum((X1-A1)^2) + sum((X2-A2)^2)
+    print(obj_new)
+    
+    print("Update S1, S2")
+    # update S and full row space
+    if (r1 == rr){
+      S1 = matrix(rep(0, p), nrow = p)
+      P_rall1 = P_r
+    }
+    else{
+      S1 = updateS(X1, P_call = P_call1, P_r = P_r, dimS = r1 - rr)
+      P_rall1 = P_r + projection(S1, ortho = TRUE)
+    }
+    if (r2 == rr){
+      S2 = matrix(rep(0, p), nrow = p)
+      P_rall2 = P_r
+    }
+    else{
+      S2 = updateS(X2, P_call = P_call2, P_r = P_r, dimS = r2 - rr)
+      P_rall2 = P_r + projection(S2, ortho = TRUE)
+    }
+    # calculate objective function difference
+    A1 = P_call1 %*% X1 %*% P_rall1
+    A2 = P_call2 %*% X2 %*% P_rall2
+    obj_new = sum((X1-A1)^2) + sum((X2-A2)^2)
+    print(obj_new)
+    error = abs(obj_new - obj_old)
+    obj_old = obj_new
+    obj_vec = c(obj_vec,obj_new)
+  }
+  
+  return(list(A1 = A1, A2 = A2, M = M, N = N, obj_vec = obj_vec))
+}

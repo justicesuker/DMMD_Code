@@ -71,6 +71,3 @@ lose_data = rbind(away_lose_data,home_lose_data)
 
 write.csv(win_data,"Win_team.csv",row.names = F)
 write.csv(lose_data,"Lose_team.csv",row.names = F)
-
-# The saved files are in agreement with what Himanshu provides us.
-

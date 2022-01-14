@@ -1,13 +1,11 @@
 # This is the function that compares accuracy of signal estimation given true ranks between DMMD and JIVE. 
 rm(list=ls())
-function_path = "Simulations/MyFunction/"
+function_path = "DMMDFunctions/"
 source(paste(function_path,"Angle_Calculation.R",sep=''))
 source(paste(function_path,"Profile_Likelihood_Rank_Selection.R",sep=''))
 source(paste(function_path,"DoubleMatchedMatrixDecomposition.R",sep=''))
-source(paste(function_path,"DoubleMatchedDataGen.R",sep=''))
 source(paste(function_path,"FindOptMatrix.R",sep=''))
 source(paste(function_path,"Preliminary_Functions.R",sep=''))
-source(paste(function_path,"Select_ED_Rank.R",sep=''))
 
 library(foreach)
 library(doParallel)
