@@ -74,7 +74,7 @@ FindOpt_SimplifiedCase<- function(X, M, N, r){
   }
 }
 
-# An iterative function that solves the optimization problem of (1) in the manuscript.
+# An iterative function that solves the optimization problem of (2) in the manuscript.
 # M is the column space that the solution should have
 # N is the row space that the solution should have
 # r is the rank
