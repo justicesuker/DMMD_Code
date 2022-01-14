@@ -1,14 +1,12 @@
 rm(list = ls())
 load("Application/TCGA/TCGA_BRCA_New_Data.RData")
-function_path = "Simulations/MyFunction/"
+function_path = "DMMDFunctions/"
 
 source(paste(function_path,"Angle_Calculation.R",sep=''))
 source(paste(function_path,"Profile_Likelihood_Rank_Selection.R",sep=''))
 source(paste(function_path,"DoubleMatchedMatrixDecomposition.R",sep=''))
-source(paste(function_path,"DoubleMatchedDataGen.R",sep=''))
 source(paste(function_path,"FindOptMatrix.R",sep=''))
 source(paste(function_path,"Preliminary_Functions.R",sep=''))
-source(paste(function_path,"Select_ED_Rank.R",sep=''))
 library(r.jive)
 
 # Before doing center and scale, check if some of the rows are of variance 0.
@@ -75,5 +73,3 @@ result_row = jive(data_log_row, scale = FALSE, center = FALSE)
 result_col = jive(data_log_col, scale = FALSE, center = FALSE)
 
 save(result,result_row,result_col,dcs_cancer,dcs_normal,file = "Application/TCGA/2021New/DoubleSTD_DMMD_JIVE_EqualVaraince_Result.RData")
-
-

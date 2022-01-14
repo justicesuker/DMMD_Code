@@ -1,7 +1,7 @@
 rm(list = ls())
 # Load the result of DMMD and JIVE
 load('Application/TCGA/2021New/DoubleSTD_DMMD_JIVE_EqualVaraince_Result.RData')
-function_path = "Simulations/MyFunction/"
+function_path = "DMMDFunctions/"
 source(paste(function_path,"Preliminary_Functions.R",sep=''))
 
 library(ggplot2)
@@ -112,19 +112,16 @@ variation_frame2[,1] = c(Fnorm(DMMD_J_r2)^2,Fnorm(DMMD_I_r2)^2,Fnorm(DMMD_Error2
 
 figure.path = 'Application/TCGA/Variation/'
 
-pdf(paste(figure.path, "VariationExplained_Cancer.pdf", sep = ""), onefile = T)
+pdf(paste(figure.path, "VariationExplained_Cancer.pdf", sep = ""), onefile = T, height = 6, width = 8)
 s1 <- ggplot(variation_frame1, aes(Method, SSE, fill = Section))
 s1 <- s1 + geom_bar(position = "fill", stat = "identity") + scale_y_continuous(labels = percent) +
-  ggtitle("Primary Tumor Tissue") + ylab("Percentage Variance Explained") + theme(axis.text = element_text(size = 10),legend.text = element_text(size = 10), axis.title = element_text(size = 12))
+  ggtitle("Primary Tumor Tissue") + ylab("Percentage Variance Explained") + theme(text = element_text(size = 18), axis.text.x = element_text(angle = 45, size = 15, vjust = 1, hjust = 1)) + xlab("") + scale_fill_manual(values = c("#ffffcc", "#41b6c4", "#253494"))
 print(s1)
 dev.off()
 
-pdf(paste(figure.path, "VariationExplained_Normal.pdf", sep = ""), onefile = T)
+pdf(paste(figure.path, "VariationExplained_Normal.pdf", sep = ""), onefile = T, height = 6, width = 8)
 s2 <- ggplot(variation_frame2, aes(Method, SSE, fill = Section))
 s2 <- s2 + geom_bar(position = "fill", stat = "identity") + scale_y_continuous(labels = percent) + 
-  ggtitle("Normal Tissue") + ylab("Percentage Variance Explained") + theme(axis.text = element_text(size = 10),legend.text = element_text(size = 10), axis.title = element_text(size = 12))
+  ggtitle("Normal Tissue") + ylab("Percentage Variance Explained") + theme(text = element_text(size = 18), axis.text.x = element_text(angle = 45, size = 15, vjust = 1, hjust = 1)) + xlab("") + scale_fill_manual(values = c("#ffffcc", "#41b6c4", "#253494"))
 print(s2)
 dev.off()
-
-
-

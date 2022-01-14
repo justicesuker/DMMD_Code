@@ -1,17 +1,17 @@
 rm(list = ls())
 win_data = read.csv("Application/Soccer/Winning Team Soccer.csv")
 lose_data = read.csv("Application/Soccer/Losing Team Soccer.csv")
-function_path = "Simulations/MyFunction/"
+function_path1 = "DMMDFunctions/"
+function_path2 = "OtherFunctions/"
 
-source(paste(function_path,"Angle_Calculation.R",sep=''))
-source(paste(function_path,"Profile_Likelihood_Rank_Selection.R",sep=''))
-source(paste(function_path,"DoubleMatchedMatrixDecomposition.R",sep=''))
-source(paste(function_path,"DoubleMatchedDataGen.R",sep=''))
-source(paste(function_path,"FindOptMatrix.R",sep=''))
-source(paste(function_path,"Preliminary_Functions.R",sep=''))
-source(paste(function_path,"Select_ED_Rank.R",sep=''))
-library(r.jive)
-library(ajive)
+source(paste(function_path1,"Angle_Calculation.R",sep=''))
+source(paste(function_path1,"Profile_Likelihood_Rank_Selection.R",sep=''))
+source(paste(function_path1,"DoubleMatchedMatrixDecomposition.R",sep=''))
+source(paste(function_path1,"DMMD_iterative.R",sep=''))
+source(paste(function_path1,"FindOptMatrix.R",sep=''))
+source(paste(function_path1,"Preliminary_Functions.R",sep=''))
+source(paste(function_path2,"Select_ED_Rank.R",sep=''))
+
 dim(win_data)
 win_data[1:5,1:5]
 colnames(win_data)
@@ -33,14 +33,6 @@ result_ed$Rank
 
 result_unequal = DMMD_v2(w_data,l_data, variance1 = "unequal")
 result_unequal$Rank
-
-# Ajive will return errors.
-data_ajive_col = list(w_data,l_data)
-initial_signal_ranks = c(1,1)
-result_ajive_col = ajive(data_ajive_col, initial_signal_ranks)
-
-initial_signal_ranks = c(2,1)
-result_ajive_col = ajive(data_ajive_col, initial_signal_ranks)
 
 plot(svd(l_data)$d, main = "Scree plot for losing team")
 plot(svd(w_data)$d, main = "Scree plot for winning team")
@@ -90,8 +82,26 @@ print(variation_vec2)
 
 #If we want to have more than 90% variance explained, we need r1 = 2, 
 # which is in agreement of PL using unequal variance assumption. 
-
 I1_u = result_unequal$`Row Decomposition`$`Individual Row 1`
 J1_u = result_unequal$`Row Decomposition`$`Joint Row 1`
 print(J1_u[1,]/J1_u[1,1])
 print(I1_u[1,]/I1_u[1,1])
+
+# Now let's try to use Iterative DMMD:
+r1 = 2
+r2 = 1
+rc = 1
+rr = 1
+DMMDi_result = DMMD_i(as.matrix(w_data),as.matrix(l_data), r1, r2, rc, rr)
+
+J1_i = DMMDi_result$A1 %*% projection(DMMDi_result$N,ortho = TRUE)
+I1_i = DMMDi_result$A1 - J1_i
+
+J2_i = DMMDi_result$A2 %*% projection(DMMDi_result$N,ortho = TRUE)
+I2_i = DMMDi_result$A2 - J2_i
+
+I1_i[1,]/I1_i[1,1]
+J1_i[1,]/J1_i[1,1]
+
+rbind("DMMD win signal" = I1[1,]/I1[1,1], "DMMD-i win signal" = I1_i[1,]/I1_i[1,1])
+rbind("DMMD joint signal" = J1[1,]/J1[1,1], "DMMD-i joint signal" = J1_i[1,]/J1_i[1,1])

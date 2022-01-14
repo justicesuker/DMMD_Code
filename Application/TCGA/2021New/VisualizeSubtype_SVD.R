@@ -8,9 +8,8 @@ library(pheatmap)
 library(RColorBrewer)
 library(rafalib)
 library(gplots)
-library(d3heatmap)
 library(ggplot2)
-library(ComplexHeatmap)
+library(ComplexHeatmap) # To install, run: library(devtools) AND install_github("jokergoo/ComplexHeatmap")
 library(circlize)
 
 # Load the result of DMMD and JIVE

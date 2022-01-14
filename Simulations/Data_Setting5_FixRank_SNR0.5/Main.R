@@ -1,7 +1,8 @@
 rm(list=ls())
-function_path = "Simulations/MyFunction/"
-source(paste(function_path,"DoubleMatchedDataGen.R",sep=''))
-source(paste(function_path,"Preliminary_Functions.R",sep=''))
+function_path1 = "DMMDFunctions/"
+function_path2 = "OtherFunctions/"
+source(paste(function_path1,"Preliminary_Functions.R",sep =''))
+source(paste(function_path2,"DoubleMatchedDataGen.R",sep =''))
 set.seed(37)
 
 n = 240
