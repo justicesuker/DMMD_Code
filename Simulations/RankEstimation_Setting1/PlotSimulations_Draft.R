@@ -8,7 +8,7 @@ rm(output)
 load("Simulations/RankEstimation_Setting1/output.RData")
 
 # Load my Fnorm function
-function_path = "Simulations/MyFunction/"
+function_path = "DMMDFunctions/"
 source(paste(function_path,"Preliminary_Functions.R",sep=''))
 
 # n = 240
@@ -115,14 +115,13 @@ joint_mat = data.frame(Error = y_joint,
 # AJIVE: blue for row; skyblue for column matching
 # SLIDE: green for row; green4 for column matching
 
-gg_joint <- ggplot(joint_mat, aes(x=Method, y=Error))
-gg_joint <- gg_joint + geom_boxplot(aes(color=Method))
-gg_joint <- gg_joint + facet_wrap(~RowCol)
-gg_joint <- gg_joint + theme_bw()
-gg_joint <- gg_joint + theme(strip.background=element_rect(fill="black"))
-gg_joint <- gg_joint + theme(strip.text=element_text(color="white", face="bold"))
-gg_joint <- gg_joint + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ggtitle("") + ylab("Estimated Rank - True Rank")
-gg_joint <- gg_joint + scale_colour_manual(values = c("blue", "red", "black","green"))
+gg_joint <- ggplot(joint_mat, aes(x=Method, y=Error)) + 
+  geom_boxplot(aes(fill = Method)) + facet_wrap(~RowCol) + theme_bw() +
+  theme(strip.background=element_rect(fill="black"), text=element_text(size = 25))
+gg_joint <- gg_joint + theme(strip.text=element_text(color="white", face="bold", size = 25))
+gg_joint <- gg_joint + scale_fill_manual(values = c("#ffffcc", "#a1dab4", "#41b6c4", "#225ea8"))
+
+gg_joint <- gg_joint + theme(axis.text.x = element_text(angle = 45, size = 20, vjust = 1, hjust = 1)) + guides(fill="none") + ylab("Estimated Rank - True Rank")
 gg_joint
 
 y_total = c(my_error_total_rank1_PL, my_error_total_rank1_ED, 
@@ -144,22 +143,18 @@ total_mat = data.frame(Error = y_total,
                        Method = method_total,
                        Matrix = MatrixName)
 
-gg_total <- ggplot(total_mat, aes(x=Method, y=Error))
-gg_total <- gg_total + geom_boxplot(aes(color=Method))
-gg_total <- gg_total + facet_wrap(~Matrix)
-gg_total <- gg_total + theme_bw()
-gg_total <- gg_total + theme(strip.background=element_rect(fill="black"))
-gg_total <- gg_total + theme(strip.text=element_text(color="white", face="bold"))
-gg_total <- gg_total + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ggtitle("") + ylab("Estimated Rank - True Rank")
-gg_total <- gg_total + scale_colour_manual(values = c("grey","orange","red","black","green4","green"))
+gg_total <- ggplot(total_mat, aes(x=Method, y=Error)) + geom_boxplot(aes(fill=Method)) + facet_wrap(~Matrix) + theme_bw()
+gg_total <- gg_total + theme(strip.background=element_rect(fill="black"), text=element_text(size = 25)) + theme(strip.text=element_text(color="white", face="bold", size = 25))
+gg_total <- gg_total + scale_fill_manual(values = c("#ffffcc","#c7e9b4","#7fcdbb","#41b6c4","#2c7fb8","#253494"))
+gg_total <- gg_total + theme(axis.text.x = element_text(angle = 45, size = 20, vjust = 1, hjust = 1)) + guides(fill="none") + ylab("Estimated Rank - True Rank")
 gg_total
 
 # Draw boxplot
 fig.path = "Simulations/RankEstimation_Setting1/Figures/Draft/"
-pdf(file = paste(fig.path,"Comparison on Joint Rank Estimation_Setting1.pdf",sep=""), width = 5, height = 4)
+pdf(file = paste(fig.path,"Comparison on Joint Rank Estimation_Setting1.pdf",sep=""), width = 10, height = 7)
 print(gg_joint)
 dev.off()
 
-pdf(file = paste(fig.path,"Comparison on Total Rank Estimation_Setting1.pdf",sep=""), width = 5, height = 4)
+pdf(file = paste(fig.path,"Comparison on Total Rank Estimation_Setting1.pdf",sep=""), width = 10, height = 7)
 print(gg_total)
 dev.off()
