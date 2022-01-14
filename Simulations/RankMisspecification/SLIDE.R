@@ -1,10 +1,13 @@
 # This is the function that gets signal identification results from SLIDE.
+# Warning: the output of this program SLIDEoutput.RData is not in the repo because the size exceeds 100M.
+# If you want to reproduce the result, please run this program yourself to generate the output, SLIDEoutput.RData.
+# You may want to specify your own number of clusters based on your computer.
 
 library(foreach)
 library(doParallel)
 # Get the generated data
 load("Simulations/Data_Setting4_FixRank/Data.RData")
-source("Simulations/MyFunction/slide_prelim.R")
+source("OtherFunctions/slide_prelim.R")
 
 set.seed(37)
 
@@ -85,4 +88,4 @@ output_jointsmall <- foreach (i = 1:nrep, .errorhandling = 'pass') %dopar% {
 
 stopCluster(cl)
 
-save(output_small, output_large, output_jointsmall, total_rank1,total_rank2,joint_rank_col,joint_rank_row, file = "SLIDEoutput.RData")
+save(output_small, output_large, output_jointsmall, total_rank1,total_rank2,joint_rank_col,joint_rank_row, file = "Simulations/RankMisspecification/SLIDEoutput.RData")

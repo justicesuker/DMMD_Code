@@ -1,31 +1,32 @@
 # Load the result from SLIDE and DMMD
 rm(list = ls())
-# The SLIDE output is too large, which is stored outside our project folder.
-load("Simulations/AdditionalSimulations/SLIDEoutput.RData")
+# The SLIDE output is too large, which is not stored in the folder.
+# To obtain it, please run SLIDE.R.
+load("Simulations/RankMisspecification/SLIDEoutput.RData")
 output_slide_small = output_small
 output_slide_large = output_large
 output_slide_jointsmall = output_jointsmall
 rm(output_small, output_large, output_jointsmall)
 
-load("Simulations/AdditionalSimulations/AJIVE_output.RData")
+load("Simulations/RankMisspecification/AJIVE_output.RData")
 output_ajive_small = output_small
 output_ajive_large = output_large
 output_ajive_jointsmall = output_jointsmall
 rm(output_small, output_large, output_jointsmall)
 
-load("Simulations/AdditionalSimulations/Irina_output.RData")
+load("Simulations/RankMisspecification/Irina_output.RData")
 output_Irina_small = output_small
 output_Irina_large = output_large
 output_Irina_jointsmall = output_jointsmall
 rm(output_small, output_large, output_jointsmall)
 
-load("Simulations/AdditionalSimulations/output.RData")
+load("Simulations/RankMisspecification/output.RData")
 output_small = output_small
 output_large = output_large
 output_jointsmall = output_jointsmall
 
 # Load my functions
-source("Simulations/MyFunction/Preliminary_Functions.R")
+source("DMMDFunctions/Preliminary_Functions.R")
 
 # Size of each data matrix.
 n = 240
@@ -409,9 +410,6 @@ for (i in 1:nrep){
   Irina_joint_col_error2_jointsmall[i] = output_Irina_jointsmall[[i]]$Irina_joint_col_error2
 }
 
-# Get some immediate sense on the comparison.
-boxplot(my_signal_error1_small, jive_row_error1_small, slide_col_error1_small, slide_row_error1_small, ajive_col_error1_small, Irina_signal_error1_small)
-
 # Plot the comparison result based on overall signal error.
 y_row = c(my_signal_error1_small, my_signal_error2_small, Irina_signal_error1_small, Irina_signal_error2_small, slide_row_error1_small, 
           slide_row_error2_small, jive_row_error1_small, jive_row_error2_small, ajive_row_error1_small, ajive_row_error2_small,
@@ -456,17 +454,11 @@ gg_col <- gg_col + ylab("Relative Error")
 gg_col <- gg_col + theme(strip.background=element_rect(fill="black"))
 gg_col <- gg_col + theme(strip.text=element_text(color="white", face="bold", size = 25))
 gg_col <- gg_col + theme(text=element_text(size = 25))
-#gg_col <- gg_col + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())
 gg_col <- gg_col + scale_colour_manual(values = c("blue", "black", "maroon", "red","green"))
-
 gg_col = gg_col + theme(axis.text.x = element_text(angle = 45, size = 25, vjust = 0.5)) + guides(col="none")
 
-pdf(file = paste(fig.path,"Signal Identification Rank Misspecified Column Decomposition Setting4.pdf",sep=""), width = 16, height = 9)
-print(gg_col)
-dev.off()
-
 # Save plots
-fig.path = "Simulations/AdditionalSimulations/Figures/RankMis/"
+fig.path = "Simulations/RankMisspecification/Figures/"
 pdf(file = paste(fig.path,"Signal Identification Rank Misspecified Row Decomposition Setting4.pdf",sep=""), width = 13, height = 8)
 print(gg_row)
 dev.off()
@@ -536,8 +528,3 @@ table2 = table %>%
   pivot_wider(names_from = "method", values_from = "output")
 
 table2
-
-# Make it in latex
-library(xtable)
-t = xtable(table2)
-print(t, include.rownames = FALSE)

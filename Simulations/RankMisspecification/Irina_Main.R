@@ -1,17 +1,18 @@
-# This is the function that compares accuracy of signal estimation given true ranks between DMMD and JIVE. 
-source("../MyFunction/Angle_Calculation.R")
-source("../MyFunction/Profile_Likelihood_Rank_Selection.R")
-source("../MyFunction/DoubleMatchedMatrixDecomposition.R")
-source("../MyFunction/FindOptMatrix.R")
-source("../MyFunction/Preliminary_Functions.R")
-source("../MyFunction/Select_ED_Rank.R")
-source("../IrinaFunction/DMMD_Irina.R")
+rm(list = ls())
+# Check the difference between my original algorithm and DMMD-i.
+function_path = "DMMDFunctions/"
+source(paste(function_path,"Angle_Calculation.R",sep=''))
+source(paste(function_path,"Profile_Likelihood_Rank_Selection.R",sep=''))
+source(paste(function_path,"DoubleMatchedMatrixDecomposition.R",sep=''))
+source(paste(function_path,"FindOptMatrix.R",sep=''))
+source(paste(function_path,"Preliminary_Functions.R",sep=''))
+source(paste(function_path,"DMMD_iterative.R",sep=''))
 
 library(foreach)
 library(doParallel)
 
 # Get the generated data
-load("../Data_Setting4_FixRank/Data.RData")
+load("Simulations/Data_Setting4_FixRank/Data.RData")
 
 set.seed(37)
 n = 240
@@ -58,7 +59,7 @@ output_small <- foreach (i = 1:nrep) %dopar% {
   I2_c = signal2 - J2_c
   
   # DMMD-i
-  Irina_result = DMMD_Irina(X1, X2, r1 = total_rank1[i]-1, r2 = total_rank2[i]-1, rc = joint_rank_col[i]-1, rr = joint_rank_row[i]-1)
+  Irina_result = DMMD_i(X1, X2, r1 = total_rank1[i]-1, r2 = total_rank2[i]-1, rc = joint_rank_col[i]-1, rr = joint_rank_row[i]-1)
   
   Irina_Jc1 = projection(Irina_result$M,ortho = TRUE) %*% Irina_result$A1
   Irina_Jc2 = projection(Irina_result$M,ortho = TRUE) %*% Irina_result$A2
@@ -104,7 +105,7 @@ output_large <- foreach (i = 1:nrep) %dopar% {
   I2_c = signal2 - J2_c
   
   # DMMD-i
-  Irina_result = DMMD_Irina(X1, X2, r1 = total_rank1[i]+1, r2 = total_rank2[i]+1, rc = joint_rank_col[i]+1, rr = joint_rank_row[i]+1)
+  Irina_result = DMMD_i(X1, X2, r1 = total_rank1[i]+1, r2 = total_rank2[i]+1, rc = joint_rank_col[i]+1, rr = joint_rank_row[i]+1)
   
   Irina_Jc1 = projection(Irina_result$M,ortho = TRUE) %*% Irina_result$A1
   Irina_Jc2 = projection(Irina_result$M,ortho = TRUE) %*% Irina_result$A2
@@ -150,7 +151,7 @@ output_jointsmall <- foreach (i = 1:nrep) %dopar% {
   I2_c = signal2 - J2_c
   
   # DMMD-i
-  Irina_result = DMMD_Irina(X1, X2, r1 = total_rank1[i], r2 = total_rank2[i], rc = joint_rank_col[i]-1, rr = joint_rank_row[i]-1)
+  Irina_result = DMMD_i(X1, X2, r1 = total_rank1[i], r2 = total_rank2[i], rc = joint_rank_col[i]-1, rr = joint_rank_row[i]-1)
   
   Irina_Jc1 = projection(Irina_result$M,ortho = TRUE) %*% Irina_result$A1
   Irina_Jc2 = projection(Irina_result$M,ortho = TRUE) %*% Irina_result$A2
@@ -181,4 +182,4 @@ output_jointsmall <- foreach (i = 1:nrep) %dopar% {
 }
 
 stopCluster(cl)
-save(output_small, output_large, output_jointsmall, file = "Irina_output.RData")
+save(output_small, output_large, output_jointsmall, file = "Simulations/RankMisspecification/Irina_output.RData")
