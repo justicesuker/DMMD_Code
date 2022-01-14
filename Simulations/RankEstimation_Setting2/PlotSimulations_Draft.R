@@ -144,10 +144,10 @@ y_total = c(my_error_total_rank1_PL, my_error_total_rank1_ED,
 
 method_total = rep(c(rep("PL",n),
                      rep("ED",n),
-                     rep("JIVE(R)",n),
-                     rep("JIVE(C)",n),
-                     rep("SLIDE(R)",n),
-                     rep("SLIDE(C)",n)),2)
+                     rep("JIVE(Row)",n),
+                     rep("JIVE(Column)",n),
+                     rep("SLIDE(Row)",n),
+                     rep("SLIDE(Column)",n)),2)
 MatrixName = c(rep("First Matrix",6*n),rep("Second Matrix",6*n))
 
 total_mat = data.frame(Error = y_total,
