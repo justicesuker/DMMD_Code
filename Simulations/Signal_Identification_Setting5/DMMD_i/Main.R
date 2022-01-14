@@ -156,4 +156,4 @@ output <- foreach (i = 1:nrep) %dopar% {
 }
 
 stopCluster(cl)
-save(output, file = "output.RData")
+save(output, file = "Simulations/Signal_Identification_Setting5/DMMD_i/output.RData")

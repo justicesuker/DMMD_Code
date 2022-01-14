@@ -1,4 +1,4 @@
-# This is the function that compares accuracy of signal estimation given true ranks between DMMD and JIVE. 
+# This is the function that compares accuracy of signal estimation given true ranks between DMMD and AJIVE. 
 rm(list=ls())
 function_path = "DMMDFunctions/"
 source(paste(function_path,"Angle_Calculation.R",sep=''))

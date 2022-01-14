@@ -1,12 +1,10 @@
 # This is the function that compares accuracy of signal estimation given true ranks between DMMD and JIVE. 
-function_path = "Simulations/MyFunction/"
+function_path = "DMMDFunctions/"
 source(paste(function_path,"Angle_Calculation.R",sep=''))
 source(paste(function_path,"Profile_Likelihood_Rank_Selection.R",sep=''))
 source(paste(function_path,"DoubleMatchedMatrixDecomposition.R",sep=''))
-source(paste(function_path,"DoubleMatchedDataGen.R",sep=''))
 source(paste(function_path,"FindOptMatrix.R",sep=''))
 source(paste(function_path,"Preliminary_Functions.R",sep=''))
-source(paste(function_path,"Select_ED_Rank.R",sep=''))
 library(foreach)
 library(doParallel)
 
@@ -30,7 +28,6 @@ min_total = rep(18,nrep)
 
 joint_rank_col = c(rep(0, nrep/2), min_total[(nrep/2+1):nrep])
 joint_rank_row = c(rep(0, nrep/4), min_total[(nrep/4+1):(nrep/2)], rep(0, nrep/4), min_total[(3*nrep/4+1):nrep])
-
 
 cl = makeCluster(28)
 registerDoParallel(cl)
@@ -142,4 +139,3 @@ output <- foreach (i = 1:nrep) %dopar% {
 
 stopCluster(cl)
 save(output, file = "Simulations/Signal_Identification_Setting6_Special/output.RData")
-
