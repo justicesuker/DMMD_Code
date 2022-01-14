@@ -1,35 +1,27 @@
 rm(list = ls())
-load("Simulations/Signal_Identification_Setting5/SLIDEoutput.RData")
-output_slide = output
-rm(output)
-load("Simulations/Signal_Identification_Setting5/AJIVE_output.RData")
-output_ajive = output
-rm(output)
-load("Simulations/Signal_Identification_Setting5/output.RData")
-
 # Load my Fnorm function
-function_path = "Simulations/MyFunction/"
+function_path = "DMMDFunctions/"
 source(paste(function_path,"Preliminary_Functions.R",sep=''))
+# Load the original generated data to get the signal information.
+load("Simulations/Data_Setting5_FixRank_SNR0.5/Data.RData")
+
+load("Simulations/Signal_Identification_Setting5/DMMD_i/output.RData")
+
 # Size of each data matrix.
 n = 240
 p = 200
 
-# Load the original generated data to get the signal information.
-load("Simulations/Data_Setting5_FixRank_SNR0.5/Data.RData")
-
+library(ggplot2)
 # Here is the rank information used to generate the data.
 nrep = 140
 r1 = 20
 r2 = 18
 rc = 4
 rr = 3
-
 total_rank1 = rep(r1,nrep)
 total_rank2 = rep(r2,nrep)
 joint_rank_col = rep(rc,nrep)
 joint_rank_row = rep(rr,nrep)
-
-library(ggplot2)
 
 my_signal_error1 = rep(NA,nrep)
 my_signal_error2 = rep(NA,nrep)
@@ -41,6 +33,73 @@ my_joint_col_error1 = rep(NA,nrep)
 my_joint_col_error2 = rep(NA,nrep)
 my_ind_col_error1 = rep(NA,nrep)
 my_ind_col_error2 = rep(NA,nrep)
+
+Irina_signal_error1 = rep(NA,nrep)
+Irina_signal_error2 = rep(NA,nrep)
+Irina_joint_row_error1 = rep(NA,nrep)
+Irina_joint_row_error2 = rep(NA,nrep)
+Irina_ind_row_error1 = rep(NA,nrep)
+Irina_ind_row_error2 = rep(NA,nrep)
+Irina_joint_col_error1 = rep(NA,nrep)
+Irina_joint_col_error2 = rep(NA,nrep)
+Irina_ind_col_error1 = rep(NA,nrep)
+Irina_ind_col_error2 = rep(NA,nrep)
+
+Alliter_signal_error1 = rep(NA,nrep)
+Alliter_signal_error2 = rep(NA,nrep)
+Alliter_joint_row_error1 = rep(NA,nrep)
+Alliter_joint_row_error2 = rep(NA,nrep)
+Alliter_ind_row_error1 = rep(NA,nrep)
+Alliter_ind_row_error2 = rep(NA,nrep)
+Alliter_joint_col_error1 = rep(NA,nrep)
+Alliter_joint_col_error2 = rep(NA,nrep)
+Alliter_ind_col_error1 = rep(NA,nrep)
+Alliter_ind_col_error2 = rep(NA,nrep)
+
+# Load the simulation result got from high performance server.
+for (i in 1:nrep){
+  my_signal_error1[i] = output[[i]]$my_signal_error1
+  my_signal_error2[i] = output[[i]]$my_signal_error2
+  my_joint_row_error1[i] = output[[i]]$my_joint_row_error1
+  my_joint_row_error2[i] = output[[i]]$my_joint_row_error2
+  my_ind_row_error1[i] = output[[i]]$my_ind_row_error1
+  my_ind_row_error2[i] = output[[i]]$my_ind_row_error2
+  my_joint_col_error1[i] = output[[i]]$my_joint_col_error1
+  my_joint_col_error2[i] = output[[i]]$my_joint_col_error2
+  my_ind_col_error1[i] = output[[i]]$my_ind_col_error1
+  my_ind_col_error2[i] = output[[i]]$my_ind_col_error2
+  
+  Irina_signal_error1[i] = output[[i]]$Irina_signal_error1
+  Irina_signal_error2[i] = output[[i]]$Irina_signal_error2
+  Irina_joint_row_error1[i] = output[[i]]$Irina_joint_row_error1
+  Irina_joint_row_error2[i] = output[[i]]$Irina_joint_row_error2
+  Irina_ind_row_error1[i] = output[[i]]$Irina_ind_row_error1
+  Irina_ind_row_error2[i] = output[[i]]$Irina_ind_row_error2
+  Irina_joint_col_error1[i] = output[[i]]$Irina_joint_col_error1
+  Irina_joint_col_error2[i] = output[[i]]$Irina_joint_col_error2
+  Irina_ind_col_error1[i] = output[[i]]$Irina_ind_col_error1
+  Irina_ind_col_error2[i] = output[[i]]$Irina_ind_col_error2
+  
+  Alliter_signal_error1[i] = output[[i]]$Alliter_signal_error1
+  Alliter_signal_error2[i] = output[[i]]$Alliter_signal_error2
+  Alliter_joint_row_error1[i] = output[[i]]$Alliter_joint_row_error1
+  Alliter_joint_row_error2[i] = output[[i]]$Alliter_joint_row_error2
+  Alliter_ind_row_error1[i] = output[[i]]$Alliter_ind_row_error1
+  Alliter_ind_row_error2[i] = output[[i]]$Alliter_ind_row_error2
+  Alliter_joint_col_error1[i] = output[[i]]$Alliter_joint_col_error1
+  Alliter_joint_col_error2[i] = output[[i]]$Alliter_joint_col_error2
+  Alliter_ind_col_error1[i] = output[[i]]$Alliter_ind_col_error1
+  Alliter_ind_col_error2[i] = output[[i]]$Alliter_ind_col_error2
+}
+
+rm(output)
+load("Simulations/Signal_Identification_Setting5/SLIDEoutput.RData")
+output_slide = output
+rm(output)
+load("Simulations/Signal_Identification_Setting5/AJIVE_output.RData")
+output_ajive = output
+rm(output)
+load("Simulations/Signal_Identification_Setting5/output.RData")
 
 jive_row_error1 = rep(NA,nrep)
 jive_row_error2 = rep(NA,nrep)
@@ -83,17 +142,6 @@ ajive_col_ind_error2 = rep(NA,nrep)
 
 # Load the simulation result got from high performance server.
 for (i in 1:nrep){
-  my_signal_error1[i] = output[[i]]$my_signal_error1
-  my_signal_error2[i] = output[[i]]$my_signal_error2
-  my_joint_row_error1[i] = output[[i]]$my_joint_row_error1
-  my_joint_row_error2[i] = output[[i]]$my_joint_row_error2
-  my_ind_row_error1[i] = output[[i]]$my_ind_row_error1
-  my_ind_row_error2[i] = output[[i]]$my_ind_row_error2
-  my_joint_col_error1[i] = output[[i]]$my_joint_col_error1
-  my_joint_col_error2[i] = output[[i]]$my_joint_col_error2
-  my_ind_col_error1[i] = output[[i]]$my_ind_col_error1
-  my_ind_col_error2[i] = output[[i]]$my_ind_col_error2
-  
   jive_row_error1[i] = output[[i]]$jive_row_error1
   jive_row_error2[i] = output[[i]]$jive_row_error2
   jive_row_joint_error1[i] = output[[i]]$jive_row_joint_error1
@@ -182,62 +230,59 @@ for (i in 1:nrep){
   }
 }
 
-# Get some immediate sense on the comparison.
-boxplot(my_signal_error1, jive_row_error1, slide_col_error1, slide_row_error1, ajive_col_error1, ajive_row_error1)
-# boxplot(my_ind_col_error1,jive_col_ind_error1,slide_col_ind_error1)
-# boxplot(my_ind_col_error2,jive_col_ind_error2,slide_col_ind_error2)
-# boxplot(my_ind_col_error2,slide_col_ind_error2)
-
 # Plot the comparison result.
 y_row = c(my_signal_error1, my_signal_error2, my_joint_row_error1, my_joint_row_error2, my_ind_row_error1, my_ind_row_error2,
+          Irina_signal_error1, Irina_signal_error2, Irina_joint_row_error1, Irina_joint_row_error2, Irina_ind_row_error1, Irina_ind_row_error2,
           slide_row_error1, slide_row_error2, slide_row_joint_error1, slide_row_joint_error2, slide_row_ind_error1, slide_row_ind_error2,
           jive_row_error1, jive_row_error2, jive_row_joint_error1, jive_row_joint_error2, jive_row_ind_error1, jive_row_ind_error2,
           ajive_row_error1, ajive_row_error2, ajive_row_joint_error1, ajive_row_joint_error2, ajive_row_ind_error1, ajive_row_ind_error2)
 
 y_col = c(my_signal_error1, my_signal_error2, my_joint_col_error1, my_joint_col_error2, my_ind_col_error1, my_ind_col_error2,
+          Irina_signal_error1, Irina_signal_error2, Irina_joint_col_error1, Irina_joint_col_error2, Irina_ind_col_error1, Irina_ind_col_error2,
           slide_col_error1, slide_col_error2, slide_col_joint_error1, slide_col_joint_error2, slide_col_ind_error1, slide_col_ind_error2,
           jive_col_error1, jive_col_error2, jive_col_joint_error1, jive_col_joint_error2, jive_col_ind_error1, jive_col_ind_error2,
           ajive_col_error1, ajive_col_error2, ajive_col_joint_error1, ajive_col_joint_error2, ajive_col_ind_error1, ajive_col_ind_error2)
 
-method = as.factor(c(rep("DMMD",6*nrep), rep("SLIDE",6*nrep), rep("JIVE",6*nrep), rep("AJIVE",6*nrep)))
+method = as.factor(c(rep("DMMD",6*nrep), rep("DMMD-i",6*nrep), rep("SLIDE",6*nrep), rep("JIVE",6*nrep), rep("AJIVE",6*nrep)))
 
 section = as.factor(rep(c(rep("1st Signal", nrep), rep("2nd Signal", nrep), 
                           rep("1st Joint", nrep), rep("2nd Joint", nrep),
-                          rep("1st Individual", nrep), rep("2nd Individual", nrep)),4))
+                          rep("1st Individual", nrep), rep("2nd Individual", nrep)),5))
 
 row_mat = data.frame(Error = y_row, Method = method, Section = section)
 col_mat = data.frame(Error = y_col, Method = method, Section = section)
 
-gg_row <- ggplot(row_mat, aes(x=Method, y=Error))
-gg_row <- gg_row + geom_boxplot(aes(color=Method))
-gg_row <- gg_row + facet_wrap(~Section)
-gg_row <- gg_row + theme_bw()
-gg_row <- gg_row + ylab("Relative Error")
-gg_row <- gg_row + theme(strip.background=element_rect(fill="black"))
-gg_row <- gg_row + theme(strip.text=element_text(color="white", face="bold",size = 22))
-gg_row <- gg_row + theme(text=element_text(size = 22))
-gg_row <- gg_row + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) 
-gg_row <- gg_row + scale_colour_manual(values = c("blue", "black", "red","green"))
+# Version 1
+gg_row <- ggplot(row_mat, aes(x=Method, y=Error))+ geom_boxplot(aes(fill=Method))+ facet_wrap(~Section)+ theme_bw() + ylab("Relative Error") + theme(strip.background=element_rect(fill="black")) + theme(strip.text=element_text(color="white", face="bold",size = 25), text=element_text(size = 25))
+gg_row <- gg_row + scale_fill_manual(values = c("#ffffcc", "#a1dab4", "#41b6c4", "#2c7fb8","#253494"))
+gg_row <- gg_row + theme(axis.text.x = element_text(angle = 45, size = 25, vjust = 1, hjust = 1)) + guides(fill="none") 
 gg_row
 
-gg_col <- ggplot(col_mat, aes(x=Method, y=Error))
-gg_col <- gg_col + geom_boxplot(aes(color=Method))
-gg_col <- gg_col + facet_wrap(~Section)
-gg_col <- gg_col + theme_bw()
-gg_col <- gg_col + ylab("Relative Error")
-gg_col <- gg_col + theme(strip.background=element_rect(fill="black"))
-gg_col <- gg_col + theme(strip.text=element_text(color="white", face="bold",size = 22))
-gg_col <- gg_col + theme(text=element_text(size = 22))
-gg_col <- gg_col + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) 
-gg_col <- gg_col + scale_colour_manual(values = c("blue", "black", "red","green"))
+# Version 2
+gg_row <- ggplot(row_mat, aes(x=Method, y=Error))+ geom_boxplot(aes(fill=Method))+ facet_wrap(~Section, scales = "free")+ theme_bw() + ylab("Relative Error") + theme(strip.background=element_rect(fill="black")) + theme(strip.text=element_text(color="white", face="bold",size = 25), text=element_text(size = 25))
+gg_row <- gg_row + theme(axis.title.x=element_blank(), axis.ticks.x=element_blank(), axis.text.x=element_blank(),  legend.position = "bottom") 
+gg_row <- gg_row + scale_fill_manual(values = c("#ffffcc", "#a1dab4", "#41b6c4", "#2c7fb8","#253494"))
+gg_row
+
+# Version 1
+gg_col <- ggplot(col_mat, aes(x=Method, y=Error)) + geom_boxplot(aes(fill=Method)) + facet_wrap(~Section) + theme_bw() + ylab("Relative Error") + theme(strip.background=element_rect(fill="black")) + theme(strip.text=element_text(color="white", face="bold",size = 25), text=element_text(size = 25))
+gg_col <- gg_col + theme( axis.text = element_text(color = 'black', face="bold", size = 19))
+gg_col <- gg_col + theme(axis.title.x=element_blank(), axis.ticks.x=element_blank(), legend.position = "none") 
+gg_col <- gg_col + scale_fill_manual(values = c("#ffffcc", "#a1dab4", "#41b6c4", "#2c7fb8","#253494"))
+gg_col
+
+# Version 2
+gg_col <- ggplot(col_mat, aes(x=Method, y=Error)) + geom_boxplot(aes(fill=Method)) + facet_wrap(~Section, scales = "free") + theme_bw() + ylab("Relative Error") + theme(strip.background=element_rect(fill="black")) + theme(strip.text=element_text(color="white", face="bold",size = 25), text=element_text(size = 25))
+gg_col <- gg_col + theme(axis.title.x=element_blank(), axis.ticks.x=element_blank(), axis.text.x=element_blank(),  legend.position = "bottom") 
+gg_col <- gg_col + scale_fill_manual(values = c("#ffffcc", "#a1dab4", "#41b6c4", "#2c7fb8","#253494"))
 gg_col
 
 # Draw boxplot
 fig.path = "Simulations/Signal_Identification_Setting5/Figures/Draft/"
-pdf(file = paste(fig.path,"Signal Identification for Row Decomposition_All_Setting5.pdf",sep=""), width = 10, height = 8)
+pdf(file = paste(fig.path,"Signal Identification for Row Decomposition_All_Setting5.pdf",sep=""), width = 12, height = 9)
 print(gg_row)
 dev.off()
 
-pdf(file = paste(fig.path,"Signal Identification for Column Decomposition_All_Setting5.pdf",sep=""), width = 10, height = 8)
+pdf(file = paste(fig.path,"Signal Identification for Column Decomposition_All_Setting5.pdf",sep=""), width = 12, height = 9)
 print(gg_col)
 dev.off()

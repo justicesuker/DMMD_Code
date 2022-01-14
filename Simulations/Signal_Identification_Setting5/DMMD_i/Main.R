@@ -1,19 +1,17 @@
-# Check the difference between my original algorithm and Irina's update.
-
-# This is the function that compares accuracy of signal estimation given true ranks between DMMD and JIVE. 
-source("../../../MyFunction/Angle_Calculation.R")
-source("../../../MyFunction/Profile_Likelihood_Rank_Selection.R")
-source("../../../MyFunction/DoubleMatchedMatrixDecomposition.R")
-source("../../../MyFunction/FindOptMatrix.R")
-source("../../../MyFunction/Preliminary_Functions.R")
-source("../../../MyFunction/Select_ED_Rank.R")
-source("../../../IrinaFunction/DMMD_Irina.R")
+# Check the difference between my original algorithm and DMMD-i.
+function_path = "DMMDFunctions/"
+source(paste(function_path,"Angle_Calculation.R",sep=''))
+source(paste(function_path,"Profile_Likelihood_Rank_Selection.R",sep=''))
+source(paste(function_path,"DoubleMatchedMatrixDecomposition.R",sep=''))
+source(paste(function_path,"FindOptMatrix.R",sep=''))
+source(paste(function_path,"Preliminary_Functions.R",sep=''))
+source(paste(function_path,"DMMD_iterative.R",sep=''))
 
 library(foreach)
 library(doParallel)
 
 # Get the generated data
-load("../../../Data_Setting5_FixRank_SNR0.5/Data.RData")
+load("Simulations/Data_Setting5_FixRank_SNR0.5/Data.RData")
 
 set.seed(37)
 n = 240
@@ -71,7 +69,7 @@ output <- foreach (i = 1:nrep) %dopar% {
   my_ind_col_error2 = Fnorm(my_result$`Column Decomposition`$`Individual Column 2` - I2_c)^2/Fnorm(I2_c)^2
   
   # Irina update
-  Irina_result = DMMD_Irina(X1, X2, r1 = total_rank1[i], r2 = total_rank2[i], rc = joint_rank_col[i], rr = joint_rank_row[i])
+  Irina_result = DMMD_i(X1, X2, r1 = total_rank1[i], r2 = total_rank2[i], rc = joint_rank_col[i], rr = joint_rank_row[i])
   Alliter_result = DMMD_All(X1, X2, r1 = total_rank1[i], r2 = total_rank2[i], rc = joint_rank_col[i], rr = joint_rank_row[i])
   
   # Get all decomposition sections from Irina update

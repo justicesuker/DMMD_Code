@@ -2,9 +2,9 @@
 
 library(foreach)
 library(doParallel)
-
+source("OtherFunctions/slide_prelim.R")
 # Get the generated data
-load("Simulations/Data_Setting5_FixRank_SNR0.5/Data.RData")
+load("Simulations/Data_Setting4_FixRank/Data.RData")
 
 set.seed(37)
 
@@ -35,80 +35,8 @@ output <- foreach (i = 1:nrep, .errorhandling = 'pass') %dopar% {
   X2 = X2_list[[i]]
   data_temp_c = cbind(X1,X2)
   data_temp_r = cbind(t(X1),t(X2))
-  S_c = matrix(rep(0,2*(r1+r2-r_c)),nrow = 2)
-  if (r_c != 0){
-    for (i in 1:r_c){
-      S_c[,i] = c(1,1)
-    }
-    if (r1-r_c>0){
-      for (i in 1:(r1-r_c)){
-        S_c[,i+r_c] = c(1,0)
-      }
-      if (r2-r_c>0){
-        for (i in 1:(r2-r_c)){
-          S_c[,i+r1] = c(0,1)
-        }
-      }
-    }
-    if(r1-r_c==0){
-      if (r2-r_c>0){
-        for (i in 1:(r2-r_c)){
-          S_c[,i+r1] = c(0,1)
-        }
-      }
-    }
-  }
-  if (r_c == 0){
-    if (r1-r_c>0){
-      for (i in 1:(r1-r_c)){
-        S_c[,i+r_c] = c(1,0)
-      }
-    }
-    if (r1-r_c==0){
-      if (r2-r_c>0){
-        for (i in 1:(r2-r_c)){
-          S_c[,i+r1] = c(0,1)
-        }
-      }
-    }
-  }
-  S_r = matrix(rep(0,2*(r1+r2-r_r)),nrow = 2)
-  if (r_r != 0){
-    for (i in 1:r_r){
-      S_r[,i] = c(1,1)
-    }
-    if (r1-r_r>0){
-      for (i in 1:(r1-r_r)){
-        S_r[,i+r_r] = c(1,0)
-      }
-      if (r2-r_r>0){
-        for (i in 1:(r2-r_r)){
-          S_r[,i+r1] = c(0,1)
-        }
-      }
-    }
-    if(r1-r_r==0){
-      if (r2-r_r>0){
-        for (i in 1:(r2-r_r)){
-          S_r[,i+r1] = c(0,1)
-        }
-      }
-    }
-  }
-  if (r_r == 0){
-    if (r1-r_r>0){
-      for (i in 1:(r1-r_r)){
-        S_r[,i+r_r] = c(1,0)
-      }
-    }
-    if (r1-r_r==0){
-      if (r2-r_r>0){
-        for (i in 1:(r2-r_r)){
-          S_r[,i+r1] = c(0,1)
-        }
-      }
-    }
-  }
+  S_c = getS(r1, r2, r_c, ndata = 2)
+  S_r = getS(r1, r2, r_r, ndata = 2)
   slide_result_c = slide_givenS(data_temp_c, pvec, S_c, standardized = T)
   slide_result_r = slide_givenS(data_temp_r, nvec, S_r, standardized = T)
   list(slide_result_c = slide_result_c, 
@@ -118,8 +46,3 @@ output <- foreach (i = 1:nrep, .errorhandling = 'pass') %dopar% {
 stopCluster(cl)
 
 save(output,total_rank1,total_rank2,joint_rank_col,joint_rank_row, file = "Simulations/Signal_Identification_Setting5/SLIDEoutput.RData")
-
-
-
-
-
