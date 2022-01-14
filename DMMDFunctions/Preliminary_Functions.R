@@ -5,24 +5,6 @@ Fnorm <- function(X){
   return(result)
 }
 
-# svd_est <- function(X,r,svd = NULL){
-#   if (r <= 0){
-#     stop("The rank must be a positive integer!")
-#   }
-#   if(is.null(svd)){
-#     svd = svd(X)
-#   }
-#   U = as.matrix(svd$u[,1:r])
-#   V = as.matrix(svd$v[,1:r])
-#   if (r == 1){
-#     D = as.matrix(svd$d[1])
-#   }
-#   else{
-#     D = diag(svd$d[1:r])
-#   }
-#   X_est = U %*% D %*% t(V)
-# }
-
 # Center and Scale for each row in a matrix.
 MatscaleRow <- function(X, center = TRUE, scale = TRUE){
   result = X
