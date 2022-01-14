@@ -1,13 +1,13 @@
 # This is the function that compares accuracy of rank estimation.
 # The methods we compare are profile likelihood (PL), edge distribution (ED) and permutation method used in JIVE
-function_path = "Simulations/MyFunction/"
-source(paste(function_path,"Angle_Calculation.R",sep=''))
-source(paste(function_path,"Profile_Likelihood_Rank_Selection.R",sep=''))
-source(paste(function_path,"DoubleMatchedMatrixDecomposition.R",sep=''))
-source(paste(function_path,"DoubleMatchedDataGen.R",sep=''))
-source(paste(function_path,"FindOptMatrix.R",sep=''))
-source(paste(function_path,"Preliminary_Functions.R",sep=''))
-source(paste(function_path,"Select_ED_Rank.R",sep=''))
+function_path1 = "DMMDFunctions/"
+function_path2 = "OtherFunctions/"
+source(paste(function_path1,"Angle_Calculation.R",sep=''))
+source(paste(function_path1,"Profile_Likelihood_Rank_Selection.R",sep=''))
+source(paste(function_path1,"DoubleMatchedMatrixDecomposition.R",sep=''))
+source(paste(function_path1,"FindOptMatrix.R",sep=''))
+source(paste(function_path1,"Preliminary_Functions.R",sep=''))
+source(paste(function_path2,"Select_ED_Rank.R",sep=''))
 
 library(foreach)
 library(doParallel)
@@ -91,9 +91,4 @@ output <- foreach (i = 1:nrep) %dopar% {
 
 stopCluster(cl)
 
-save(output,total_rank1,total_rank2,joint_rank_col,joint_rank_row, file = "Simulations/RankEstimation_Setting2/output.RData"
-)
-
-
-
-
+save(output,total_rank1,total_rank2,joint_rank_col,joint_rank_row, file = "Simulations/RankEstimation_Setting2/output.RData")
