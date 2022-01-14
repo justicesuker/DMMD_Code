@@ -1,12 +1,12 @@
 rm(list=ls())
-function_path = "Simulations/MyFunction/"
-source(paste(function_path,"Angle_Calculation.R",sep=''))
-source(paste(function_path,"Profile_Likelihood_Rank_Selection.R",sep=''))
-source(paste(function_path,"DoubleMatchedMatrixDecomposition.R",sep=''))
-source(paste(function_path,"DoubleMatchedDataGen.R",sep=''))
-source(paste(function_path,"FindOptMatrix.R",sep=''))
-source(paste(function_path,"Preliminary_Functions.R",sep=''))
-source(paste(function_path,"Select_ED_Rank.R",sep=''))
+function_path1 = "DMMDFunctions/"
+function_path2 = "OtherFunctions/"
+source(paste(function_path1,"Angle_Calculation.R",sep=''))
+source(paste(function_path1,"Profile_Likelihood_Rank_Selection.R",sep=''))
+source(paste(function_path1,"DoubleMatchedMatrixDecomposition.R",sep=''))
+source(paste(function_path1,"FindOptMatrix.R",sep=''))
+source(paste(function_path1,"Preliminary_Functions.R",sep=''))
+source(paste(function_path2,"DoubleMatchedDataGen.R",sep=''))
 library(r.jive)
 set.seed(37)
 
@@ -95,7 +95,6 @@ library(pheatmap)
 library(RColorBrewer)
 library(rafalib)
 library(gplots)
-library(d3heatmap)
 library(ggplot2)
 library(ComplexHeatmap)
 library(circlize)
@@ -110,7 +109,7 @@ final_range = max(abs(range_max),abs(range_min))
 
 hmcol <- colorRamp2(c(-final_range, 0, final_range), c("blue ", "white", "red"))
 
-fig.path = "FinalFigures2021/"
+fig.path = "Simulations/Model_Demo_Picture/FinalFigures2021/"
 
 X_tot = rbind(X1,X2)
 J_c = rbind(J1c,J2c)
@@ -177,4 +176,3 @@ dev.off()
 pdf(file = paste(fig.path,"Est_Row_Decomposition_Demo.pdf",sep=""), width = 8, height = 6)
 print(g1_est + g5_est + g6_est + g4_est)
 dev.off()
-
