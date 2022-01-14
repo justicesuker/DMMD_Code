@@ -34,7 +34,3 @@ output <- foreach (i = 1:nrep, .errorhandling = 'pass') %dopar% {
 
 stopCluster(cl)
 save(output,total_rank1,total_rank2,joint_rank_col,joint_rank_row, file = "Simulations/RankEstimation_Setting3_Special_Final/SLIDEoutput.RData")
-
-
-
-
