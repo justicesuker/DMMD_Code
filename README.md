@@ -2,9 +2,8 @@
 
 This repository contains functions to implement DMMD method in [Dongbang Yuan and Irina Gaynanova. "Double-matched matrix decomposition for multi-view data"](https://arxiv.org/abs/2105.03396), as well as scripts to reproduce the results in the paper. 
 
-Given two data matrices *X*<sub>1</sub> and *X*<sub>k</sub> with matched n samples, and matched p features, the method extracts additive decomposition
+Given two data matrices *X*<sub>1</sub> and *X*<sub>2</sub> with matched n samples, and matched p features, the method extracts additive decomposition
 *X*<sub>k</sub> = *J*<sub>kc</sub> + *I*<sub>kc</sub> + *E*<sub>k</sub> = *J*<sub>kr</sub> + *I*<sub>kr</sub> + *E*<sub>k</sub>, where *J*<sub>kc</sub> is joint structure with respect to matched samples (joint column-space), *I*<sub>kc</sub> is individual structure with respect to matched samples (individual column-space), *J*<sub>kr</sub> is joint structure with respect to matched features (joint row-space), *I*<sub>kr</sub> is individual structure with respect to matched features (individual row-space), and *E*<sub>k</sub> is residual noise.
-
 
 To reproduce the results, please clone this project locally and open **DMMD_Code.Rproj** in Rstudio (this makes all relative paths in scripts work as expected).
 
@@ -26,13 +25,14 @@ To reproduce the results, please clone this project locally and open **DMMD_Code
 
 
 ### Example
-To illustrate application of DMMD, we will simulate data based on DMMD model using scripts from **DoubleMatchedDataGen.R** (located in **Other functions** folder)
+To illustrate application of DMMD, we will simulate data based on DMMD model using scripts from **DoubleMatchedDataGen.R** (located in **OtherFunctions** folder)
 
 ```{r}
 source("OtherFunctions/DoubleMatchedDataGen.R")
+source("DMMDFunctions/Preliminary_Functions.R")
 set.seed(37)
 # Generate data
-data = DoubleDataGen3(n = 20, p = 16, rank = c(5, 4), joint_rank_col = 2, joint_rank_row = 1, nrep = 1, std1 = 0.01, std2 = 0.01)
+data = DoubleDataGen3(n = 20, p = 16, rank = c(4, 3), joint_rank_col = 2, joint_rank_row = 1, nrep = 1, std1 = 0.01, std2 = 0.01)
 X1 = data$X1_list[[1]]
 X2 = data$X2_list[[1]]
 ```
@@ -45,7 +45,6 @@ source("DMMDFunctions/Profile_Likelihood_Rank_Selection.R")
 source("DMMDFunctions/DoubleMatchedMatrixDecomposition.R")
 source("DMMDFunctions/DMMD_iterative.R")
 source("DMMDFunctions/FindOptMatrix.R")
-source("DMMDFunctions/Preliminary_Functions.R")
 # Apply DMMD
 DMMD_result = DMMD_v2(X1, X2)
 # Extract estimated ranks
@@ -64,7 +63,7 @@ A1 = data$Signal1_list[[1]]
 # Check the difference between estimated signal of DMMD with true signal 
 sum((A1_est - A1)^2)
 ```
-Alternatively, DMMD-i can be applied (empirically this gives sligh improvement over DMMD, but has considerably higher computation cost, not recommended with large datasets). The output is a little different from DMMD as it directly returns estimated signal matrices and joint row/column spaces for convenience of later analyses.
+Alternatively, DMMD-i can be applied (empirically this gives slight improvement over DMMD, but has considerably higher computation cost, not recommended with large datasets). The output is a little different from DMMD as it directly returns estimated signal matrices and joint row/column spaces for convenience of later analyses.
 ```{r}
 # Apply DMMD-i
 DMMD_i_result = DMMD_i(X1, X2)
@@ -87,21 +86,19 @@ sum((A1_est_i - A1)^2)
 ```
 
 ## 3. To reproduce results
-DMMD algorithm does not rely on external libraries, however some other methods do. Please refer to the head of each script to make sure the packages are installed locally on your computer.
+DMMD algorithm does not rely on external libraries, however, for comparing different methods, corresponding libraries need to be installed. Please refer to the head of each script to make sure the packages are installed locally on your computer.
 
-**Model_Demo_Picture** folder  - codes to generate example of DMMD decomposition on toy datafrom Figure 1 
+**Model_Demo_Picture** folder  - codes to generate example of DMMD decomposition on toy data from Figure 1 
 
 **SimulationData_Setting1**, **SimulationData_Setting2**, **SimulationData_Setting3**, **Data_Setting4_FixRank**, **Data_Setting5_FixRank_SNR0.5**, **SimulationData_Setting6** folders within *Simulations*:
 
   - *Main.R* within each respective folder generates simulation data for corresponding setting. See Section 3 of the paper for additional details on the settings.
 
-**RankEstimation_Setting1**, **RankEstimation_Setting2**, **RankEstimation_Setting3_Special_Final**, **Signal_Identification_Setting4**, **Signal_Identification_Setting4**, **Signal_Identification_Setting5**, **Signal_Identification_Setting6_Special** folders within *Simulations*:
+**RankEstimation_Setting1**, **RankEstimation_Setting2**, **RankEstimation_Setting3_Special_Final**, **Signal_Identification_Setting4**, **Signal_Identification_Setting4**, **Signal_Identification_Setting5**, **Signal_Identification_Setting6** folders within *Simulations*:
 
 - *AJIVE.R* has implementation of [AJIVE](https://arxiv.org/pdf/1704.02060.pdf),  *SLIDE.R* has implementation of [SLIDE](https://doi.org/10.1111/biom.13108); *Main.R* runs DMMD and [JIVE](https://doi.org/10.1214/12-AOAS597), *PlotSimulations_Draft.R* combines all the results from AJIVE, SLIDE, DMMD and JIVE and plot the figures. They are saved in *Figures/Draft*.
 
-Rank estimation comparisons also include ED method in
-
-**OtherFunctions/Select_ED_Rank.R** - *Select_ED_Rank* function uses edge distribution (ED) method to calculate the total rank. The function is translated from the python code *Select_ED_Rank_K* in D-CCA.py from the supplementary material of [Shu, Hai, Xiao Wang, and Hongtu Zhu. "D-CCA: A decomposition-based canonical correlation analysis for high-dimensional datasets." Journal of the American Statistical Association 115.529 (2020): 292-306](https://amstat.tandfonline.com/doi/full/10.1080/01621459.2018.1543599?casa_token=HA13MS9KztkAAAAA%3A1Q_j0Z1DWQ-32p83DDooAf1SxI318fE5HglIgRj1YyNpZY_Kv6BJ-0RTkIajA3t6vIA_QHmhuw). Also refer to [Onatski, Alexei. “Determining the number of factors from empirical distribution of eigenvalues.” The Review of Economics and Statistics, vol. 92, no. 4, 2010, pp. 1004–1016. JSTOR](https://www.jstor.org/stable/40985808?seq=1#metadata_info_tab_contents) for more information on the edge distribution method.
+Rank estimation comparisons also include edge distribution (ED) method in [Shu, Hai, Xiao Wang, and Hongtu Zhu. "D-CCA: A decomposition-based canonical correlation analysis for high-dimensional datasets." Journal of the American Statistical Association 115.529 (2020): 292-306](https://amstat.tandfonline.com/doi/full/10.1080/01621459.2018.1543599?casa_token=HA13MS9KztkAAAAA%3A1Q_j0Z1DWQ-32p83DDooAf1SxI318fE5HglIgRj1YyNpZY_Kv6BJ-0RTkIajA3t6vIA_QHmhuw). Also refer to [Onatski, Alexei. “Determining the number of factors from empirical distribution of eigenvalues.” The Review of Economics and Statistics, vol. 92, no. 4, 2010, pp. 1004–1016. JSTOR](https://www.jstor.org/stable/40985808?seq=1#metadata_info_tab_contents) for more information on the edge distribution method.
 
 **New_Data_TCGA_Dim** folder  - High-dimensional simulation setting - supplement S3.4
 
