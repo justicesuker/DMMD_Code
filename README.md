@@ -94,7 +94,7 @@ DMMD algorithm does not rely on external libraries, however, for comparing diffe
 
   - *Main.R* within each respective folder generates simulation data for corresponding setting. See Section 3 of the paper for additional details on the settings.
 
-**RankEstimation_Setting1**, **RankEstimation_Setting2**, **RankEstimation_Setting3_Special_Final**, **Signal_Identification_Setting4**, **Signal_Identification_Setting4**, **Signal_Identification_Setting5**, **Signal_Identification_Setting6** folders within *Simulations*:
+**RankEstimation_Setting1**, **RankEstimation_Setting2**, **RankEstimation_Setting3_Special**, **Signal_Identification_Setting4**, **Signal_Identification_Setting4**, **Signal_Identification_Setting5**, **Signal_Identification_Setting6_Special** folders within *Simulations*:
 
 - *AJIVE.R* has implementation of [AJIVE](https://arxiv.org/pdf/1704.02060.pdf),  *SLIDE.R* has implementation of [SLIDE](https://doi.org/10.1111/biom.13108); *Main.R* runs DMMD and [JIVE](https://doi.org/10.1214/12-AOAS597), *PlotSimulations_Draft.R* combines all the results from AJIVE, SLIDE, DMMD and JIVE and plot the figures. They are saved in *Figures/Draft*.
 
