@@ -9,7 +9,7 @@ To reproduce the results, please clone this project locally and open **DMMD_Code
 
 ## 2. Getting started
 ### Main functions
-*DMMDFunctions* folds contains function scripts needed for implementation of DMMD. 
+*DMMDFunctions* folder contains function scripts needed for implementation of DMMD. 
 
 **DoubleMatchedMatrixDecomposition.R** - *DMMD_v2* is the main function that performs DMMD, which includes rank selection and estimation of signal matrices given the ranks
 
