@@ -33,10 +33,10 @@ MatscaleRow <- function(X, center = TRUE, scale = TRUE){
 # General function that does center and scale for a matrix, either row-wise or column-wise.
 Matscale = function(X, center = TRUE, scale = TRUE, att = 'row'){
   if (att == 'row'){
-    result = MatscaleRow(X, center = TRUE, scale = TRUE)
+    result = MatscaleRow(X, center = center, scale = scale)
   }
   if (att == 'col'){
-    temp = MatscaleRow(t(X), center = TRUE, scale = TRUE)
+    temp = MatscaleRow(t(X), center = center, scale = scale)
     result = t(temp)
   }
   return(result)
