@@ -1,7 +1,7 @@
 # DMMD (Double-matched matrix decomposition for multi-view data)
 
 ## 1. Overview
-This repository contains functions to implement DMMD method in [Dongbang Yuan and Irina Gaynanova. "Double-matched matrix decomposition for multi-view data"](https://arxiv.org/abs/2105.03396), as well as scripts to reproduce the results in the paper. 
+This repository contains functions to implement DMMD method in [Dongbang Yuan and Irina Gaynanova. "Double-matched matrix decomposition for multi-view data"](https://www.tandfonline.com/doi/abs/10.1080/10618600.2022.2067860), as well as scripts to reproduce the results in the paper. 
 
 Given two data matrices *X*<sub>1</sub> and *X*<sub>2</sub> with matched n samples, and matched p features, the method extracts additive decomposition
 *X*<sub>k</sub> = *J*<sub>kc</sub> + *I*<sub>kc</sub> + *E*<sub>k</sub> = *J*<sub>kr</sub> + *I*<sub>kr</sub> + *E*<sub>k</sub>, where *J*<sub>kc</sub> is joint structure with respect to matched samples (joint column-space), *I*<sub>kc</sub> is individual structure with respect to matched samples (individual column-space), *J*<sub>kr</sub> is joint structure with respect to matched features (joint row-space), *I*<sub>kr</sub> is individual structure with respect to matched features (individual row-space), and *E*<sub>k</sub> is residual noise.
